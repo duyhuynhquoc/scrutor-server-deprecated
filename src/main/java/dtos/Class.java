@@ -2,14 +2,14 @@ package dtos;
 
 public class Class {
     private String classId;
-    private String teacherId;
+    private String role;
 
     public Class() {
     }
 
-    public Class(String classId, String teacherId) {
+    public Class(String classId, String role) {
         this.classId = classId;
-        this.teacherId = teacherId;
+        this.role = role;
     }
 
     public String getClassId() {
@@ -20,19 +20,19 @@ public class Class {
         this.classId = classId;
     }
 
-    public String getTeacherId() {
-        return teacherId;
+    public String getRole() {
+        return role;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
     public String toString() {
-        return "ClassDTO{" +
+        return "Class{" +
                 "classId='" + classId + '\'' +
-                ", teacherId='" + teacherId + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }
