@@ -1,27 +1,29 @@
 package dtos;
 
-public class Student {
-    private String studentId;
+public class User {
+    private String userId;
     private String fullName;
     private String password;
     private String email;
+    private  String role;
 
-    public Student() {
+    public User() {
     }
 
-    public Student(String studentId, String fullName, String password, String email) {
-        this.studentId = studentId;
+    public User(String userId, String fullName, String password, String email, String role) {
+        this.userId = userId;
         this.fullName = fullName;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFullName() {
@@ -48,13 +50,11 @@ public class Student {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "TeacherDTO{" +
-                "teacherId='" + studentId + '\'' +
-                ", fullname='" + fullName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -1,16 +1,16 @@
 package dtos;
 
-public class Student_Quiz {
+public class User_Quiz {
     private int quizId;
-    private String studentId;
+    private String userId;
     private int grade;
 
-    public Student_Quiz() {
+    public User_Quiz() {
     }
 
-    public Student_Quiz(int quizId, String studentId, int grade) {
+    public User_Quiz(int quizId, String userId, int grade) {
         this.quizId = quizId;
-        this.studentId = studentId;
+        this.userId = userId;
         this.grade = grade;
     }
 
@@ -22,12 +22,12 @@ public class Student_Quiz {
         this.quizId = quizId;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public int getGrade() {
