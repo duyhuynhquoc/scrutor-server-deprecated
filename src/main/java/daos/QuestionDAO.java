@@ -40,7 +40,7 @@ public class QuestionDAO {
             if (conn != null) {
                 preStm = conn.prepareStatement(sql);
                 preStm.setString(1, q.getUserId());
-                preStm.setString(2, q.getContent());
+                preStm.setString(2, q.getQuestionContent());
                 preStm.setString(3, q.getType());
                 preStm.setInt(4, q.getDifficulty());
             }
@@ -66,7 +66,7 @@ public class QuestionDAO {
             if (conn != null) {
                 preStm = conn.prepareStatement(sql);
                 preStm.setString(1, question.getUserId());
-                preStm.setString(2, question.getContent());
+                preStm.setString(2, question.getQuestionContent());
                 preStm.setString(3, question.getType());
                 preStm.setInt(4, question.getDifficulty());
                 preStm.setString(5, question.getQuestionId());

@@ -3,7 +3,7 @@ package dtos;
 public class Question {
 
     private String questionId;
-    private String content;
+    private String questionContent;
     private String type;
     private int difficulty;
     private String userId;
@@ -11,9 +11,9 @@ public class Question {
     public Question() {
     }
 
-    public Question(String questionId, String content, String type, int difficulty, String userId) {
+    public Question(String questionId, String questionContent, String type, int difficulty, String userId) {
         this.questionId = questionId;
-        this.content = content;
+        this.questionContent = questionContent;
         this.type = type;
         this.difficulty = difficulty;
         this.userId = userId;
@@ -27,12 +27,12 @@ public class Question {
         this.questionId = questionId;
     }
 
-    public String getContent() {
-        return content;
+    public String getQuestionContent() {
+        return questionContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setQuestionContent(String questionContent) {
+        this.questionContent = questionContent;
     }
 
     public String getType() {

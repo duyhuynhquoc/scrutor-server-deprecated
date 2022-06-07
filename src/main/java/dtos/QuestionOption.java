@@ -4,16 +4,16 @@ public class QuestionOption {
 
     private String questionOptionId;
     private String questionId;
-    private String content;
+    private String questionOptionContent;
     private boolean isCorrect;
 
     public QuestionOption() {
     }
 
-    public QuestionOption(String questionOptionId, String questionId, String content, boolean isCorrect) {
+    public QuestionOption(String questionOptionId, String questionId, String questionOptionContent, boolean isCorrect) {
         this.questionOptionId = questionOptionId;
         this.questionId = questionId;
-        this.content = content;
+        this.questionOptionContent = questionOptionContent;
         this.isCorrect = isCorrect;
     }
 
@@ -33,12 +33,12 @@ public class QuestionOption {
         this.questionId = questionId;
     }
 
-    public String getContent() {
-        return content;
+    public String getQuestionOptionContent() {
+        return questionOptionContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setQuestionOptionContent(String questionOptionContent) {
+        this.questionOptionContent = questionOptionContent;
     }
 
     public boolean isCorrect() {
