@@ -6,11 +6,11 @@ import java.sql.SQLException;
 public class DBUtils {
     public static Connection makeConnection() {
         Connection connection = null;
-        String id = "localhost";
-        String instanceName = "SQLEXPRESS";
-        String port = "1433";
+        String id = "scrutor.cwcluovkimqe.us-west-1.rds.amazonaws.com";
+        String instanceName = "scrutor";
+        String port = "3306";
         String db = "Scrutor";
-        String username = "sa";
+        String username = "admin";
         String password = "123456789";
         
         String urlDatabase = String.format("jdbc:sqlserver://%s\\%s:%s;databaseName=%s;user=%s;password=%s", id, instanceName, port, db, username, password);
