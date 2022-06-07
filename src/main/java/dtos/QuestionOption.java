@@ -5,12 +5,12 @@ public class QuestionOption {
     private String questionOptionId;
     private String questionId;
     private String content;
-    private String isCorrect;
+    private boolean isCorrect;
 
     public QuestionOption() {
     }
 
-    public QuestionOption(String questionOptionId, String questionId, String content, String isCorrect) {
+    public QuestionOption(String questionOptionId, String questionId, String content, boolean isCorrect) {
         this.questionOptionId = questionOptionId;
         this.questionId = questionId;
         this.content = content;
@@ -41,11 +41,11 @@ public class QuestionOption {
         this.content = content;
     }
 
-    public String getIsCorrect() {
+    public boolean isCorrect() {
         return isCorrect;
     }
 
-    public void setIsCorrect(String isCorrect) {
-        this.isCorrect = isCorrect;
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
     }
 }

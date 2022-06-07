@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Quiz {
 
-    private int quizId;
+    private String quizId;
     private String content;
     private Date startAt;
     private Date endAt;
@@ -15,7 +15,7 @@ public class Quiz {
     public Quiz() {
     }
 
-    public Quiz(int quizId, String content, Date startAt, Date endAt, int time, String teacherId) {
+    public Quiz(String quizId, String content, Date startAt, Date endAt, int time, String teacherId) {
         this.quizId = quizId;
         this.content = content;
         this.startAt = startAt;
@@ -24,11 +24,11 @@ public class Quiz {
         this.teacherId = teacherId;
     }
 
-    public int getQuizId() {
+    public String getQuizId() {
         return quizId;
     }
 
-    public void setQuizId(int quizId) {
+    public void setQuizId(String quizId) {
         this.quizId = quizId;
     }
 

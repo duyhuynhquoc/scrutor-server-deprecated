@@ -78,27 +78,5 @@ public class UserDAO {
         }
         return student;
     }
-//    public boolean editQuestion(Question question) throws Exception{
-//        String sql = "UPDATE scrutor_question SET teacherId=?, "
-//                + "content=?, type=?, dificulty=? WHERE questionId=?";
-//        try {
-//            conn = DBUtils.makeConnection();
-//            if (conn != null) {
-//                preStm = conn.prepareStatement(sql);
-//                preStm.setString(1, question.getTeacherId());
-//                preStm.setString(2, question.getContent());
-//                preStm.setString(3, question.getType());
-//                preStm.setInt(4, question.getDifficulty());
-//                preStm.setInt(5, question.getQuestionId());
-//                preStm.executeUpdate();
-//                return true;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }finally{
-//            closeConnection();
-//        }
-//        return false;
-//    }
+
 }

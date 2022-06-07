@@ -2,28 +2,28 @@ package dtos;
 
 public class Question {
 
-    private int questionId;
+    private String questionId;
     private String content;
     private String type;
     private int difficulty;
-    private String teacherId;
+    private String userId;
 
     public Question() {
     }
 
-    public Question(int questionId, String content, String type, int difficulty, String teacherId) {
+    public Question(String questionId, String content, String type, int difficulty, String userId) {
         this.questionId = questionId;
         this.content = content;
         this.type = type;
         this.difficulty = difficulty;
-        this.teacherId = teacherId;
+        this.userId = userId;
     }
 
-    public int getQuestionId() {
+    public String getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(int questionId) {
+    public void setQuestionId(String questionId) {
         this.questionId = questionId;
     }
 
@@ -51,17 +51,11 @@ public class Question {
         this.difficulty = difficulty;
     }
 
-    public String getTeacherId() {
-        return teacherId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
-
-    @Override
-    public String toString() {
-        return "QuestionDTO{" + "questionId=" + questionId + ", content=" + content + ", type=" + type + ", dificulty=" + difficulty + ", teacherId=" + teacherId + '}';
-    }
-
 }
