@@ -17,13 +17,14 @@ import java.sql.ResultSet;
  * @author LCCuong
  */
 public class UserDAO {
+
     private Connection conn = null;
     private PreparedStatement preStm = null;
     private ResultSet rs = null;
 
     public UserDAO() {
     }
-    
+
     private void closeConnection() throws Exception {
         if (rs != null) {
             rs.close();
@@ -36,7 +37,7 @@ public class UserDAO {
         }
     }
 
-    public User getTeacher(String userId, String password) throws Exception{
+    public User getTeacher(String userId, String password) throws Exception {
         User teacher = null;
         try {
             String sql = "SELECT userId, FullName, password, email, role FROM scrutor_User"
@@ -48,16 +49,17 @@ public class UserDAO {
             preStm.setString(2, password);
             rs = preStm.executeQuery();
 
-            if(rs.next()){
-                teacher = new User(rs.getString("userId"),rs.getString("FullName"),
+            if (rs.next()) {
+                teacher = new User(rs.getString("userId"), rs.getString("FullName"),
                         rs.getString("password"), rs.getString("email"), rs.getString("role"));
             }
-        } finally{
+        } finally {
             closeConnection();
         }
         return teacher;
     }
-    public User getStudent(String userId, String password) throws Exception{
+
+    public User getStudent(String userId, String password) throws Exception {
         User student = null;
         try {
             String sql = "SELECT userId, FullName, password, email, role FROM scrutor_User"
@@ -69,14 +71,39 @@ public class UserDAO {
             preStm.setString(2, password);
             rs = preStm.executeQuery();
 
-            if(rs.next()){
-                student = new User(rs.getString("userId"),rs.getString("FullName"),
+            if (rs.next()) {
+                student = new User(rs.getString("userId"), rs.getString("FullName"),
                         rs.getString("password"), rs.getString("email"), rs.getString("role"));
             }
-        } finally{
+        } finally {
             closeConnection();
         }
         return student;
+    }
+
+    public User createAccount(String userId, String fullname, String password, String email, String role) throws Exception {
+        User user = null;
+        try {
+            String sql = "Insert Into scrutor_User"
+                    + " values(?, ?, ?, ?, ?) ";
+            conn = DBUtils.makeConnection();
+
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, userId);
+            preStm.setString(2, fullname);
+            preStm.setString(3, password);
+            preStm.setString(4, email);
+            preStm.setString(5, role);
+            rs = preStm.executeQuery();
+
+            if (rs.next()) {
+                user = new User(rs.getString("userId"), rs.getString("FullName"),
+                        rs.getString("password"), rs.getString("email"), rs.getString("role"));
+            }
+        } finally {
+            closeConnection();
+        }
+        return user;
     }
 
 }
