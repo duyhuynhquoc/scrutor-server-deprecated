@@ -1,40 +1,40 @@
 package dtos;
 
 public class Question_Tag {
-    private int questionTagId;
-    private int questionId;
-    private int tagId;
+    private String questionTagId;
+    private String questionId;
+    private String tagId;
 
     public Question_Tag() {
     }
 
-    public Question_Tag(int questionTagId, int questionId, int tagId) {
+    public Question_Tag(String questionTagId, String questionId, String tagId) {
         this.questionTagId = questionTagId;
         this.questionId = questionId;
         this.tagId = tagId;
     }
 
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
-
-    public int getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(int tagId) {
-        this.tagId = tagId;
-    }
-
-    public int getQuestionTagId() {
+    public String getQuestionTagId() {
         return questionTagId;
     }
 
-    public void setQuestionTagId(int questionTagId) {
+    public void setQuestionTagId(String questionTagId) {
         this.questionTagId = questionTagId;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
+
+    public String getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
     }
 }

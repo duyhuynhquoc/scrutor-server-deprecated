@@ -5,8 +5,9 @@ import java.util.Date;
 
 public class Quiz {
 
-    private int quizId;
-    private String content;
+    private String quizId;
+    private String quizName;
+    private String description;
     private Date startAt;
     private Date endAt;
     private int time;
@@ -15,29 +16,38 @@ public class Quiz {
     public Quiz() {
     }
 
-    public Quiz(int quizId, String content, Date startAt, Date endAt, int time, String teacherId) {
+    public Quiz(String quizId, String quizName, String description, Date startAt, Date endAt, int time, String teacherId) {
         this.quizId = quizId;
-        this.content = content;
+        this.quizName = quizName;
+        this.description = description;
         this.startAt = startAt;
         this.endAt = endAt;
         this.time = time;
         this.teacherId = teacherId;
     }
 
-    public int getQuizId() {
+    public String getQuizId() {
         return quizId;
     }
 
-    public void setQuizId(int quizId) {
+    public void setQuizId(String quizId) {
         this.quizId = quizId;
     }
 
-    public String getContent() {
-        return content;
+    public String getQuizName() {
+        return quizName;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setQuizName(String quizName) {
+        this.quizName = quizName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getStartAt() {
@@ -70,17 +80,5 @@ public class Quiz {
 
     public void setTeacherId(String teacherId) {
         this.teacherId = teacherId;
-    }
-
-    @Override
-    public String toString() {
-        return "QuizDTO{" +
-                "quizId=" + quizId +
-                ", content='" + content + '\'' +
-                ", startAt=" + startAt +
-                ", endAt=" + endAt +
-                ", time=" + time +
-                ", teacherId='" + teacherId + '\'' +
-                '}';
     }
 }

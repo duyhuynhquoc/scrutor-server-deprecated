@@ -1,22 +1,22 @@
 package dtos;
 
 public class Tag {
-    private int tagId;
+    private String tagId;
     private String tagName;
 
     public Tag() {
     }
 
-    public Tag(int tagId, String tagName) {
+    public Tag(String tagId, String tagName) {
         this.tagId = tagId;
         this.tagName = tagName;
     }
 
-    public int getTagId() {
+    public String getTagId() {
         return tagId;
     }
 
-    public void setTagId(int tagId) {
+    public void setTagId(String tagId) {
         this.tagId = tagId;
     }
 
