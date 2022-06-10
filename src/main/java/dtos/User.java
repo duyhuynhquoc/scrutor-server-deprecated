@@ -1,11 +1,16 @@
 package dtos;
 
 public class User {
+
     private String userId;
     private String fullName;
     private String password;
     private String email;
-    private  String role;
+    private String role;
+    private String classId;
+    private String quizId;
+    private String userQuizId;
+    private int grade;
 
     public User() {
     }
@@ -16,7 +21,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
-    }
+    }   
 
     public String getUserId() {
         return userId;

@@ -30,32 +30,50 @@ public class QuestionDAO {
             conn.close();
         }
     }
-    public boolean CreateNewQuestion(Question q) throws SQLException, Exception {
+    public boolean CreateNewQuestion(String userId, String questionContent, String type, int difficulty) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement preStm = null;
-        String sql = "INSERT INTO QUESTION (userId, content, type, difficulty) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO QUESTION ([userId], [questionContent], [type], [difficulty]) VALUES (?, ?, ?, ?)";
 
         try {
             conn = DBUtils.makeConnection();
+            preStm = conn.prepareStatement(sql);
             if (conn != null) {
                 preStm = conn.prepareStatement(sql);
-                preStm.setString(1, q.getUserId());
-                preStm.setString(2, q.getQuestionContent());
-                preStm.setString(3, q.getType());
-                preStm.setInt(4, q.getDifficulty());
+                preStm.setString(1, userId);
+                preStm.setString(2, questionContent);
+                preStm.setString(3, type);
+                preStm.setInt(4, difficulty);
+                preStm.executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {
-            if (preStm != null) {
-                preStm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
+            closeConnection();
         }
-        return false;
+        return true;
+    }
+    public boolean CreateQuestionOption(String questionId, String questionOptionContent, Boolean isCorrect) throws Exception {
+        Connection conn = null;
+        PreparedStatement preStm = null;
+        String sql = "INSERT INTO QuestionOption ([questionId],[content],[isCorrect]) values (?,?,?,?)";
+        try {
+            conn = DBUtils.makeConnection();
+            if(conn != null) {
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(2, questionId);
+                preStm.setString(3, questionOptionContent);
+                preStm.setBoolean(4, isCorrect);
+                preStm.executeUpdate();
+            }
+        } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+        } finally {
+            closeConnection();
+        }
+        return true;
     }
 
     public boolean editQuestion(Question question) throws SQLException, Exception {
@@ -63,6 +81,7 @@ public class QuestionDAO {
                 + "content=?, type=?, dificulty=? WHERE questionId=?";
         try {
             conn = DBUtils.makeConnection();
+            preStm = conn.prepareStatement(sql);
             if (conn != null) {
                 preStm = conn.prepareStatement(sql);
                 preStm.setString(1, question.getUserId());
@@ -79,15 +98,15 @@ public class QuestionDAO {
         }finally{
             closeConnection();
         }
-        return false;
+        return true;
     }
 
     public ArrayList<QuestionBank> getAllQuestions() throws SQLException, Exception {
         try {
             conn = DBUtils.makeConnection();
-            String sql = "SELECT questionId, content, type, dificulty, userId," +
-                    "questionOptionId, content, isCorrect"
-                + "from Question JOIN  ";
+            String sql = "SELECT questionId, userId, questionContent, type, dificulty" +
+                    "questionOptionId, questionOptionContent, isCorrect"
+                + "from Question LEFT JOIN QuestionOption On Question.questionId = QuestionOption.questionId";
 
             preStm = conn.prepareStatement(sql);
 
@@ -97,17 +116,16 @@ public class QuestionDAO {
 
             while (rs.next()) {
                 String questionId = rs.getString("questionId");
-                String contentq = rs.getString("content");
+                String questionContent = rs.getString("content");
                 String type = rs.getString("type");
                 int difficulty = rs.getInt("difficulty");
                 String userId = rs.getString("userId");
 
-//                String questionId = rs.getString("questionId");
                 String questionOptionId = rs.getString("questionOptionId");
-                String contenta = rs.getString("content");
+                String questionOptionContent = rs.getString("content");
                 Boolean isCorrect = rs.getBoolean("isCorrect");
-                Question q = new Question(questionId, contentq, type, difficulty, userId );
-                QuestionOption qo = new QuestionOption(questionOptionId, questionId, contenta, isCorrect);
+                Question q = new Question(questionId, userId, questionContent, type, difficulty );
+                QuestionOption qo = new QuestionOption(questionOptionId, questionId, questionOptionContent, isCorrect);
 
                 list.add(new QuestionBank(q, qo));
             }
@@ -115,5 +133,28 @@ public class QuestionDAO {
         } finally {
            this.closeConnection();
         }
+    }
+    public Question getQuestionById(String Id)throws SQLException, Exception{
+        try {
+            conn = DBUtils.makeConnection();
+            String sql = "SELECT * FROM QUESTION WHERE questionId=?";
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, Id);
+            rs = preStm.executeQuery();
+            while(rs.next()) {
+                String questionId = rs.getString("questionId");
+                String questionContent = rs.getString("content");
+                String type = rs.getString("type");
+                int difficulty = rs.getInt("difficulty");
+                String userId = rs.getString("userId");
+                Question question = new Question(questionId, userId, questionContent, type, difficulty);
+                return question;
+            }
+        }catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            this.closeConnection();
+        }
+            return null;
     }
 }

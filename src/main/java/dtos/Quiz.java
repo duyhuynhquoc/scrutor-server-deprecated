@@ -11,19 +11,19 @@ public class Quiz {
     private Date startAt;
     private Date endAt;
     private int time;
-    private String teacherId;
+    private String userId;
 
     public Quiz() {
     }
 
-    public Quiz(String quizId, String quizName, String description, Date startAt, Date endAt, int time, String teacherId) {
+    public Quiz(String quizId, String quizName, String description, Date startAt, Date endAt, int time, String userId) {
         this.quizId = quizId;
         this.quizName = quizName;
         this.description = description;
         this.startAt = startAt;
         this.endAt = endAt;
         this.time = time;
-        this.teacherId = teacherId;
+        this.userId = userId;
     }
 
     public String getQuizId() {
@@ -74,11 +74,11 @@ public class Quiz {
         this.time = time;
     }
 
-    public String getTeacherId() {
-        return teacherId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
