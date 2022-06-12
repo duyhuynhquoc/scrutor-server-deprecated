@@ -1,13 +1,13 @@
 package dtos;
 
-public class Class {
+public class ClassDetail {
     private String classId;
     private String className;
 
-    public Class() {
+    public ClassDetail() {
     }
 
-    public Class(String classId, String className) {
+    public ClassDetail(String classId, String className) {
         this.classId = classId;
         this.className = className;
     }
