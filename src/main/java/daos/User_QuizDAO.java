@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 public class User_QuizDAO {
 
-    private Connection conn;
-    private PreparedStatement preStm;
-    private ResultSet rs;
+    private static Connection conn;
+    private static PreparedStatement preStm;
+    private static ResultSet rs;
 
     public User_QuizDAO() {
     }
 
-    private void closeConnection() throws Exception {
+    private static void closeConnection() throws Exception {
         if (rs != null) {
             rs.close();
         }
@@ -29,7 +29,7 @@ public class User_QuizDAO {
         }
     }
 
-    public boolean CreateUser_Quiz(String userId, String quizId, int grade) throws SQLException, Exception {
+    public static boolean CreateUser_Quiz(String userId, String quizId, int grade) throws SQLException, Exception {
         String sql = "INSERT INTO User_Quiz ([userId], [quizId], [grade]) VALUES (?, ?, ?)";
 
         try {

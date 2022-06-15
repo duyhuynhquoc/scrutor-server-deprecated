@@ -13,14 +13,14 @@ import java.util.ArrayList;
 
 public class QuestionDAO {
 
-    private Connection conn;
-    private PreparedStatement preStm;
-    private ResultSet rs;
+    private static Connection conn;
+    private static PreparedStatement preStm;
+    private static ResultSet rs;
 
     public QuestionDAO() {
     }
 
-    private void closeConnection() throws Exception {
+    private static void closeConnection() throws Exception {
         if (rs != null) {
             rs.close();
         }
@@ -32,7 +32,7 @@ public class QuestionDAO {
         }
     }
 
-    public boolean CreateNewQuestion(String userId, String questionContent, String type, int difficulty) throws SQLException, Exception {
+    public static boolean CreateNewQuestion(String userId, String questionContent, String type, int difficulty) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement preStm = null;
         String sql = "INSERT INTO QUESTION ([userId], [questionContent], [type], [difficulty]) VALUES (?, ?, ?, ?)";
@@ -57,7 +57,7 @@ public class QuestionDAO {
         return true;
     }
 
-    public boolean CreateQuestionOption(String questionId, String questionOptionContent, Boolean isCorrect) throws Exception {
+    public static boolean CreateQuestionOption(String questionId, String questionOptionContent, Boolean isCorrect) throws Exception {
         Connection conn = null;
         PreparedStatement preStm = null;
         String sql = "INSERT INTO QuestionOption ([questionId],[questionOptionContent],[isCorrect]) values (?,?,?,?)";
@@ -79,7 +79,7 @@ public class QuestionDAO {
         return true;
     }
 
-    public boolean editQuestion(Question question) throws SQLException, Exception {
+    public static boolean editQuestion(Question question) throws SQLException, Exception {
         String sql = "UPDATE question SET userId=?, "
                 + "content=?, type=?, dificulty=? WHERE questionId=?";
         try {
@@ -104,7 +104,7 @@ public class QuestionDAO {
         return true;
     }
 
-    public ArrayList<QuestionBank> getAllQuestions() throws SQLException, Exception {
+    public static ArrayList<QuestionBank> getAllQuestions() throws SQLException, Exception {
         try {
             conn = DBUtils.makeConnection();
             String sql = "SELECT questionId, userId, questionContent, type, dificulty"
@@ -134,11 +134,11 @@ public class QuestionDAO {
             }
             return list;
         } finally {
-            this.closeConnection();
+            closeConnection();
         }
     }
 
-    public Question getQuestionById(String Id) throws SQLException, Exception {
+    public static Question getQuestionById(String Id) throws SQLException, Exception {
         try {
             conn = DBUtils.makeConnection();
             String sql = "SELECT * FROM QUESTION WHERE questionId=?";
@@ -157,13 +157,13 @@ public class QuestionDAO {
         } catch (Exception e) {
             System.out.println(e);
         } finally {
-            this.closeConnection();
+            closeConnection();
         }
         return null;
     }
 
     ///////////////////////////////////////////// KHOA
-    public ArrayList<QuestionBank> getQuestionByTagName(String searchTagName) throws SQLException, Exception {
+    public static ArrayList<QuestionBank> getQuestionByTagName(String searchTagName) throws SQLException, Exception {
         try {
             conn = DBUtils.makeConnection();
             // 2 bảng John ( 1 cái để lấy Tag Name và 1 để lấy question Option)
@@ -198,12 +198,12 @@ public class QuestionDAO {
             }
             return list;
         } finally {
-            this.closeConnection();
+            closeConnection();
         }
     }
 
     //GetQuestionOptionByQuestionId
-    public ArrayList<QuestionBank> getQuestionOptionByQuestionID(String searchQuestionId) throws SQLException, Exception {
+    public static ArrayList<QuestionBank> getQuestionOptionByQuestionID(String searchQuestionId) throws SQLException, Exception {
         try {
             conn = DBUtils.makeConnection();
 
@@ -235,12 +235,12 @@ public class QuestionDAO {
             }
             return list;
         } finally {
-            this.closeConnection();
+            closeConnection();
         }
     }
 
     ///////////////////////////////// THUAN
-    public void deleteQuestion(String id) throws Exception {
+    public static void deleteQuestion(String id) throws Exception {
         try {
             conn = DBUtils.makeConnection();
             String query = "DELETE from Question where questionId=" + id;
@@ -253,7 +253,7 @@ public class QuestionDAO {
         }
     }
 
-    public void deleteQuestionChoices(String questionId) throws Exception {
+    public static void deleteQuestionChoices(String questionId) throws Exception {
         try {
             conn = DBUtils.makeConnection();
             String query = "DELETE from QuestionOption where questionId=" + questionId;

@@ -11,14 +11,15 @@ import java.sql.SQLException;
 import java.sql.Date;
 
 public class QuizDAO {
-    private Connection conn;
-    private PreparedStatement preStm;
-    private ResultSet rs;
+
+    private static Connection conn;
+    private static PreparedStatement preStm;
+    private static ResultSet rs;
 
     public QuizDAO() {
     }
 
-    private void closeConnection() throws Exception {
+    private static void closeConnection() throws Exception {
         if (rs != null) {
             rs.close();
         }
@@ -29,7 +30,8 @@ public class QuizDAO {
             conn.close();
         }
     }
-    public boolean CreateNewQuiz(String description, Date startAt, Date endAt,  int time) throws SQLException, Exception {
+
+    public static boolean CreateNewQuiz(String description, Date startAt, Date endAt, int time) throws SQLException, Exception {
         String sql = "INSERT INTO Quiz ([description], [startAt], [endAt], [time]) VALUES (?, ?, ?, ?)";
 
         try {
@@ -49,14 +51,15 @@ public class QuizDAO {
         }
         return true;
     }
-    public Quiz getQuizById(String Id)throws SQLException, Exception{
+
+    public  static Quiz getQuizById(String Id) throws SQLException, Exception {
         try {
             conn = DBUtils.makeConnection();
             String sql = "SELECT * FROM Quiz WHERE quizId=?";
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, Id);
             rs = preStm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String quizId = rs.getString("quizId");
                 String quizName = rs.getString("quizName");
                 String description = rs.getString("description");
@@ -64,13 +67,13 @@ public class QuizDAO {
                 Date endAt = rs.getDate("endAt");
                 int time = rs.getInt("time");
                 String userId = rs.getString("userId");
-                Quiz quiz = new Quiz(quizId, quizName, description,startAt, endAt, time, userId);
+                Quiz quiz = new Quiz(quizId, quizName, description, startAt, endAt, time, userId);
                 return quiz;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         } finally {
-            this.closeConnection();
+            closeConnection();
         }
         return null;
     }
