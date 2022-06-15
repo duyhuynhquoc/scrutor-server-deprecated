@@ -18,14 +18,14 @@ import java.sql.ResultSet;
  */
 public class UserDAO {
 
-    private Connection conn = null;
-    private PreparedStatement preStm = null;
-    private ResultSet rs = null;
+    private static Connection conn = null;
+    private static PreparedStatement preStm = null;
+    private static ResultSet rs = null;
 
     public UserDAO() {
     }
 
-    private void closeConnection() throws Exception {
+    private static void closeConnection() throws Exception {
         if (rs != null) {
             rs.close();
         }
@@ -37,7 +37,7 @@ public class UserDAO {
         }
     }
 
-    public User getTeacher(String userId, String password) throws Exception {
+    public static User getTeacher(String userId, String password) throws Exception {
         User teacher = null;
         try {
             String sql = "SELECT userId, FullName, password, email, role FROM scrutor_User"
@@ -59,7 +59,7 @@ public class UserDAO {
         return teacher;
     }
 
-    public User getStudent(String userId, String password) throws Exception {
+    public static User getStudent(String userId, String password) throws Exception {
         User student = null;
         try {
             String sql = "SELECT userId, FullName, password, email, role FROM scrutor_User"
@@ -81,7 +81,7 @@ public class UserDAO {
         return student;
     }
 
-    public User createAccount(String userId, String fullname, String password, String email, String role) throws Exception {
+    public static User createAccount(String userId, String fullname, String password, String email, String role) throws Exception {
         User user = null;
         try {
             String sql = "Insert Into scrutor_User"

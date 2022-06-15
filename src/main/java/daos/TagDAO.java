@@ -18,15 +18,15 @@ import utils.DBUtils;
  * @author LCCuong
  */
 public class TagDAO {
-    
-    private Connection conn;
-    private PreparedStatement preStm;
-    private ResultSet rs;
+
+    private static Connection conn;
+    private static PreparedStatement preStm;
+    private static ResultSet rs;
 
     public TagDAO() {
     }
 
-    private void closeConnection() throws Exception {
+    private static void closeConnection() throws Exception {
         if (rs != null) {
             rs.close();
         }
@@ -37,8 +37,9 @@ public class TagDAO {
             conn.close();
         }
     }
+
     //9/6/2022
-    public ArrayList<Tag> GetAllTag() throws SQLException, Exception {
+    public static ArrayList<Tag> GetAllTag() throws SQLException, Exception {
         Connection con = null;
         PreparedStatement preStm = null;
         ResultSet rs = null;
@@ -56,12 +57,12 @@ public class TagDAO {
                 String tagId = rs.getString("tagId");
                 String tagName = rs.getString("tagName");
 
-                Tag tag = new Tag(tagId,tagName);
+                Tag tag = new Tag(tagId, tagName);
                 list.add(tag);
             }
             return list;
         } finally {
-            this.closeConnection();
+            closeConnection();
         }
     }
 }

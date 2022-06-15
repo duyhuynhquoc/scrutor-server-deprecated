@@ -19,7 +19,7 @@ import utils.DBUtils;
  */
 public class ClassDAO {
     //9/6/2022 Get All Class
-    public ArrayList<ClassDetail> getAllClass() throws SQLException, Exception {
+    public static ArrayList<ClassDetail> getAllClass() throws SQLException, Exception {
         Connection con = null;
         PreparedStatement preStm = null;
         ResultSet rs = null;
@@ -53,7 +53,7 @@ public class ClassDAO {
         }
     }
     //9/6/2022 Get ClassName by UserID
-    public String getClassNameByID(String userID) throws SQLException {
+    public static String getClassNameByID(String userID) throws SQLException {
         Connection con = null;
         PreparedStatement preStm = null;
         ResultSet rs = null;
