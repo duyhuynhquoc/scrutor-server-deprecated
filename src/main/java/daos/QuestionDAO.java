@@ -20,15 +20,20 @@ public class QuestionDAO {
     public QuestionDAO() {
     }
 
-    private static void closeConnection() throws Exception {
-        if (rs != null) {
-            rs.close();
-        }
-        if (preStm != null) {
-            preStm.close();
-        }
-        if (conn != null) {
-            conn.close();
+    private static void closeConnection() {
+        try {
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (preStm != null) {
+                preStm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -104,7 +109,7 @@ public class QuestionDAO {
         return true;
     }
 
-    public static ArrayList<Question> getQuestions() throws SQLException, Exception {
+    public static ArrayList<Question> getQuestions() {
         conn = null;
         preStm = null;
         rs = null;
@@ -149,6 +154,8 @@ public class QuestionDAO {
                 }
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             closeConnection();
         }

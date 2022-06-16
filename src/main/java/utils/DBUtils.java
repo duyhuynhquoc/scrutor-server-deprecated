@@ -17,10 +17,10 @@ public class DBUtils {
 //        String urlDatabase = String.format("jdbc:sqlserver://%s\\%s:%s;databaseName=%s;user=%s;password=%s", id, instanceName, port, db, username, password);
         
         try {
-//            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://scrutor.cwcluovkimqe.us-west-1.rds.amazonaws.com:3306/Scrutor", "admin", "123456789");
             System.out.println("Connection to database successfully");
-        } catch (SQLException error) {
+        } catch (Exception error) {
             error.printStackTrace();
             System.out.println("DB Error");
         }
