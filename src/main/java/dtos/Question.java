@@ -1,40 +1,45 @@
 package dtos;
 
+import java.util.ArrayList;
+
 public class Question {
 
     private String questionId;
     private String userId;
-    private String questionContent;
+    private String content;
     private String type;
     private int difficulty;
-    private String questionTagId;
-    private String tagId;
-    private String questionOptionId;
-    private String questionOptionContent;
-    private boolean isCorrect;
+    private ArrayList<Tag> tags;
+    private ArrayList<QuestionOption> options;
 
     public Question() {
+        this.questionId = "";
+        this.userId = "";
+        this.content = "";
+        this.type = "";
+        this.difficulty = 0;
+        this.tags = new ArrayList<>();
+        this.options = new ArrayList<>();
     }
 
-    public Question(String questionId, String userId, String questionContent, String type, int difficulty) {
+    public Question(String questionId, String userId, String content, String type, int difficulty, ArrayList<Tag> tags, ArrayList<QuestionOption> options) {
         this.questionId = questionId;
         this.userId = userId;
-        this.questionContent = questionContent;
+        this.content = content;
         this.type = type;
         this.difficulty = difficulty;
+        this.tags = tags;
+        this.options = options;
     }
 
-    public Question(String questionTagId, String questionId, String tagId) {
+    public Question(String questionId, String userId, String content, String type, int difficulty) {
         this.questionId = questionId;
-        this.questionTagId = questionTagId;
-        this.tagId = tagId;
-    }
-
-    public Question(String questionOptionId, String questionId, String questionOptionContent, boolean isCorrect) {
-        this.questionId = questionId;
-        this.questionOptionId = questionOptionId;
-        this.questionOptionContent = questionOptionContent;
-        this.isCorrect = isCorrect;
+        this.userId = userId;
+        this.content = content;
+        this.type = type;
+        this.difficulty = difficulty;
+        this.tags = new ArrayList<>();
+        this.options = new ArrayList<>();
     }
 
     public String getQuestionId() {
@@ -53,12 +58,12 @@ public class Question {
         this.userId = userId;
     }
 
-    public String getQuestionContent() {
-        return questionContent;
+    public String getContent() {
+        return content;
     }
 
-    public void setQuestionContent(String questionContent) {
-        this.questionContent = questionContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getType() {
@@ -77,44 +82,25 @@ public class Question {
         this.difficulty = difficulty;
     }
 
-    public String getQuestionTagId() {
-        return questionTagId;
+    public ArrayList<Tag> getTags() {
+        return tags;
     }
 
-    public void setQuestionTagId(String questionTagId) {
-        this.questionTagId = questionTagId;
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
     }
 
-    public String getTagId() {
-        return tagId;
+    public ArrayList<QuestionOption> getOptions() {
+        return options;
     }
 
-    public void setTagId(String tagId) {
-        this.tagId = tagId;
+    public void setOptions(ArrayList<QuestionOption> options) {
+        this.options = options;
     }
 
-    public String getQuestionOptionId() {
-        return questionOptionId;
-    }
+    public boolean addOption(QuestionOption o){
+        this.options.add(o);
 
-    public void setQuestionOptionId(String questionOptionId) {
-        this.questionOptionId = questionOptionId;
+        return true;
     }
-
-    public String getQuestionOptionContent() {
-        return questionOptionContent;
-    }
-
-    public void setQuestionOptionContent(String questionOptionContent) {
-        this.questionOptionContent = questionOptionContent;
-    }
-
-    public boolean isIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(boolean isCorrect) {
-        this.isCorrect = isCorrect;
-    }
-
 }
