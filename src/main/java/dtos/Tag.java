@@ -1,15 +1,24 @@
 package dtos;
 
+import java.util.UUID;
+
 public class Tag {
     private String tagId;
-    private String tagName;
+    private String name;
 
     public Tag() {
+        this.tagId = UUID.randomUUID().toString();
+        this.name = "";
     }
 
-    public Tag(String tagId, String tagName) {
+    public Tag(String name) {
+        this.tagId = UUID.randomUUID().toString();
+        this.name = name;
+    }
+
+    public Tag(String tagId, String name) {
         this.tagId = tagId;
-        this.tagName = tagName;
+        this.name = name;
     }
 
     public String getTagId() {
@@ -20,11 +29,11 @@ public class Tag {
         this.tagId = tagId;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getName() {
+        return name;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,30 +1,31 @@
 package dtos;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Question {
 
     private String questionId;
-    private String userId;
+    private String teacherId;
     private String content;
     private String type;
     private int difficulty;
     private ArrayList<Tag> tags;
-    private ArrayList<QuestionOption> options;
+    private ArrayList<Option> options;
 
     public Question() {
-        this.questionId = "";
-        this.userId = "";
-        this.content = "";
-        this.type = "";
+        this.questionId = UUID.randomUUID().toString();
+        this.teacherId = null;
+        this.content = null;
+        this.type = null;
         this.difficulty = 0;
         this.tags = new ArrayList<>();
         this.options = new ArrayList<>();
     }
 
-    public Question(String questionId, String userId, String content, String type, int difficulty, ArrayList<Tag> tags, ArrayList<QuestionOption> options) {
-        this.questionId = questionId;
-        this.userId = userId;
+    public Question(String teacherId, String content, String type, int difficulty, ArrayList<Tag> tags, ArrayList<Option> options) {
+        this.questionId = UUID.randomUUID().toString();
+        this.teacherId = teacherId;
         this.content = content;
         this.type = type;
         this.difficulty = difficulty;
@@ -32,15 +33,25 @@ public class Question {
         this.options = options;
     }
 
-    public Question(String questionId, String userId, String content, String type, int difficulty) {
+    public Question(String questionId, String teacherId, String content, String type, int difficulty) {
         this.questionId = questionId;
-        this.userId = userId;
+        this.teacherId = teacherId;
         this.content = content;
         this.type = type;
         this.difficulty = difficulty;
         this.tags = new ArrayList<>();
         this.options = new ArrayList<>();
     }
+
+    public Question(String content, String type, int difficulty, ArrayList<Tag> tags, ArrayList<Option> options) {
+        this.questionId = UUID.randomUUID().toString();
+        this.content = content;
+        this.type = type;
+        this.difficulty = difficulty;
+        this.tags = tags;
+        this.options = options;
+    }
+
 
     public String getQuestionId() {
         return questionId;
@@ -50,12 +61,12 @@ public class Question {
         this.questionId = questionId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getTeacherId() {
+        return teacherId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getContent() {
@@ -90,15 +101,15 @@ public class Question {
         this.tags = tags;
     }
 
-    public ArrayList<QuestionOption> getOptions() {
+    public ArrayList<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(ArrayList<QuestionOption> options) {
+    public void setOptions(ArrayList<Option> options) {
         this.options = options;
     }
 
-    public boolean addOption(QuestionOption o){
+    public boolean addOption(Option o){
         this.options.add(o);
 
         return true;

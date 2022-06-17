@@ -2,12 +2,12 @@ package dtos;
 
 public class QuestionBank {
     private Question question;
-    private QuestionOption questionoption;
+    private Option questionoption;
 
     public QuestionBank() {
     }
 
-    public QuestionBank(Question question, QuestionOption questionoption) {
+    public QuestionBank(Question question, Option questionoption) {
         this.question = question;
         this.questionoption = questionoption;
     }
@@ -20,11 +20,11 @@ public class QuestionBank {
         this.question = question;
     }
 
-    public QuestionOption getQuestionoption() {
+    public Option getQuestionoption() {
         return questionoption;
     }
 
-    public void setQuestionoption(QuestionOption questionoption) {
+    public void setQuestionoption(Option questionoption) {
         this.questionoption = questionoption;
     }
 }
