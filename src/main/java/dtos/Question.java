@@ -1,10 +1,11 @@
 package dtos;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class Question {
-
     private String questionId;
     private String teacherId;
     private String content;

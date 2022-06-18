@@ -1,15 +1,9 @@
 package test;
 
-import daos.QuestionDAO;
-import dtos.Question;
-import dtos.Option;
-import dtos.Tag;
-
-import java.util.ArrayList;
-
 public class Test {
 
     public static void main(String[] args) {
+
         try {
 //            ArrayList<Question> list = QuestionDAO.getQuestions();
 //            for (Question q: list) {

@@ -37,4 +37,15 @@ public class QuestionsAPI {
         boolean result = QuestionDAO.updateQuestion(q, teacherId);
         return result;
     }
+
+    @DELETE
+    @Path("{questionId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean deleteQuestion(@Context HttpHeaders headers, @PathParam("questionId") String questionId){
+        String teacherId = headers.getRequestHeader("userId").get(0);
+        boolean result = QuestionDAO.deleteQuestion(questionId, teacherId);
+        return result;
+    }
+
 }

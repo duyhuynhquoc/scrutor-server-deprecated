@@ -1,12 +1,8 @@
 package daos;
 
-import dtos.ClassDetail;
-import dtos.Question;
-import dtos.User_Quiz;
 import utils.DBUtils;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class User_QuizDAO {
 
