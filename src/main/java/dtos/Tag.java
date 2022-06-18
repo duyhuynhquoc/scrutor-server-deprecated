@@ -7,12 +7,11 @@ public class Tag {
     private String name;
 
     public Tag() {
-        this.tagId = UUID.randomUUID().toString();
-        this.name = "";
+        this.tagId = null;
+        this.name = null;
     }
 
     public Tag(String name) {
-        this.tagId = UUID.randomUUID().toString();
         this.name = name;
     }
 

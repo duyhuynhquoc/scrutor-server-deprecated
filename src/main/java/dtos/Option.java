@@ -13,21 +13,18 @@ public class Option {
     private boolean isCorrect;
 
     public Option() {
-        this.optionId = UUID.randomUUID().toString();
+        this.optionId = null;
         this.questionId = null;
-        this.content = "";
+        this.content = null;
         this.isCorrect = false;
     }
 
     public Option(String content, boolean isCorrect) {
-        this.optionId = UUID.randomUUID().toString();
-        this.questionId = null;
         this.content = content;
         this.isCorrect = isCorrect;
     }
 
     public Option(String questionId, String content, boolean isCorrect) {
-        this.optionId = UUID.randomUUID().toString();
         this.questionId = questionId;
         this.content = content;
         this.isCorrect = isCorrect;

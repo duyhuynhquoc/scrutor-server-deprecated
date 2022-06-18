@@ -15,9 +15,6 @@ public class QuestionDAO {
     private static PreparedStatement preStm;
     private static ResultSet rs;
 
-    public QuestionDAO() {
-    }
-
     private static void closeConnection() {
         try {
 
@@ -35,32 +32,6 @@ public class QuestionDAO {
         }
     }
 
-
-//    public static boolean editQuestion(Question question) throws SQLException, Exception {
-//        String sql = "UPDATE question SET userId=?, "
-//                + "content=?, type=?, dificulty=? WHERE questionId=?";
-//        try {
-//            conn = DBUtils.makeConnection();
-//            preStm = conn.prepareStatement(sql);
-//            if (conn != null) {
-//                preStm = conn.prepareStatement(sql);
-//                preStm.setString(1, question.getUserId());
-//                preStm.setString(2, question.getContent());
-//                preStm.setString(3, question.getType());
-//                preStm.setInt(4, question.getDifficulty());
-//                preStm.setString(5, question.getQuestionId());
-//                preStm.executeUpdate();
-//                return true;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        } finally {
-//            closeConnection();
-//        }
-//        return true;
-//    }
-
     public static ArrayList<Question> getQuestions(String teacherId) {
         conn = null;
         preStm = null;
@@ -72,33 +43,49 @@ public class QuestionDAO {
 
             if (conn != null) {
 
-                String sql = "SELECT tbl_Question.questionId, teacherId, tbl_Question.content, type, difficulty, optionId, tbl_Option.content, isCorrect FROM tbl_Question LEFT JOIN tbl_Option On tbl_Question.questionId = tbl_Option.questionId WHERE teacherId = ?;";
+                String sql = "SELECT q.questionId, q.content, q.type, q.difficulty, t.tagId, t.name, o.optionId, o.content, o.isCorrect\n" +
+                        "FROM tbl_Question as q\n" +
+                        "INNER JOIN tbl_Question_Tag as qt\n" +
+                        "ON q.questionId = qt.questionId\n" +
+                        "INNER JOIN tbl_Tag as t\n" +
+                        "ON t.tagId = qt.tagId\n" +
+                        "INNER JOIN tbl_Option as o\n" +
+                        "ON q.questionId = o.questionId\n" +
+                        "WHERE teacherId = ?\n" +
+                        "ORDER BY q.content, t.name;";
                 preStm = conn.prepareStatement(sql);
                 preStm.setString(1, teacherId);
                 rs = preStm.executeQuery();
 
                 if (rs != null) {
-                    String preQuestionId = "";
                     while (rs.next()) {
-                        String questionId = rs.getString("tbl_Question.questionId");
-                        String questionContent = rs.getString("tbl_Question.content");
-                        String type = rs.getString("type");
-                        int difficulty = rs.getInt("difficulty");
+                        String questionId = rs.getString("q.questionId");
+                        String questionContent = rs.getString("q.content");
+                        String type = rs.getString("q.type");
+                        int difficulty = rs.getInt("q.difficulty");
 
-                        String questionOptionId = rs.getString("optionId");
-                        String questionOptionContent = rs.getString("tbl_Option.content");
-                        Boolean isCorrect = rs.getBoolean("isCorrect");
+                        String tagId = rs.getString("t.tagId");
+                        String name = rs.getString("t.name");
 
-                        Option qo = new Option(questionOptionId, questionId, questionOptionContent, isCorrect);
+                        String optionId = rs.getString("o.optionId");
+                        String optionContent = rs.getString("o.content");
+                        boolean isCorrect = rs.getBoolean("o.isCorrect");
 
-
-                        if (!questionId.equals(preQuestionId)) {
+                        // Not the same last question
+                        if (list.size() == 0 || !questionId.equals(list.get(list.size() - 1).getQuestionId())) {
                             Question q = new Question(questionId, teacherId, questionContent, type, difficulty);
+
                             list.add(q);
                         }
 
-                        list.get(list.size() - 1).addOption(qo);
-                        preQuestionId = questionId;
+                        // Not the same last tag
+                        if ((list.size() > 0 && list.get(list.size() - 1).getTags().size() > 0) || !tagId.equals(list.get(list.size() - 1).getTags().get(list.get(list.size() - 1).getTags().size() - 1).getTagId())) {
+                            Tag t = new Tag(tagId, name);
+                            list.get(list.size() - 1).addTag(t);
+                        }
+
+                        Option o = new Option(optionId, questionId, optionContent, isCorrect);
+                        list.get(list.size() - 1).addOption(o);
                     }
                 }
             }
@@ -122,10 +109,11 @@ public class QuestionDAO {
                 conn.setAutoCommit(false);
 
                 q.setTeacherId(teacherId);
+                q.setQuestionId(UUID.randomUUID().toString());
 
                 // Insert question
                 String sql = "INSERT INTO tbl_Question (questionId, teacherId, content, type, difficulty) VALUES(?, ?, ?, ?, ?);";
-                preStm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                preStm = conn.prepareStatement(sql);
 
                 preStm.setString(1, q.getQuestionId());
                 preStm.setString(2, q.getTeacherId());
@@ -135,6 +123,125 @@ public class QuestionDAO {
                 preStm.executeUpdate();
 
                 // Insert options
+                for (Option o : q.getOptions()) {
+                    try {
+                        o.setQuestionId(q.getQuestionId());
+                        o.setOptionId(UUID.randomUUID().toString());
+
+                        preStm = null;
+                        sql = "INSERT INTO tbl_Option (optionId, questionId, content, isCorrect) VALUES (?, ?, ?, ?);";
+                        preStm = conn.prepareStatement(sql);
+                        preStm.setString(1, o.getOptionId());
+                        preStm.setString(2, o.getQuestionId());
+                        preStm.setString(3, o.getContent());
+                        preStm.setBoolean(4, o.getIsCorrect());
+                        preStm.executeUpdate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Insert tags
+                for (Tag t : q.getTags()) {
+                    try {
+                        sql = "SELECT tagId FROM tbl_Tag WHERE name = ? LIMIT 1";
+                        preStm = conn.prepareStatement(sql);
+                        preStm.setString(1, t.getName());
+                        rs = preStm.executeQuery();
+
+
+                        // Check whether tag is exist in tbl_Tag
+                        if (rs != null && rs.next()) {
+                            String tagId = rs.getString("tagId");
+                            t.setTagId(tagId);
+                        } else {
+                            try {
+                                t.setTagId(UUID.randomUUID().toString());
+
+                                preStm = null;
+                                sql = "INSERT INTO tbl_Tag (tagId, name) VALUES (?, ?);";
+                                preStm = conn.prepareStatement(sql);
+                                preStm.setString(1, t.getTagId());
+                                preStm.setString(2, t.getName());
+                                preStm.executeUpdate();
+                            } catch (Exception tagException) {
+                                tagException.printStackTrace();
+                            }
+                        }
+
+                        try {
+                            preStm = null;
+                            sql = "INSERT INTO tbl_Question_Tag (questionId, tagId) VALUES (?, ?);";
+                            preStm = conn.prepareStatement(sql);
+                            preStm.setString(1, q.getQuestionId());
+                            preStm.setString(2, t.getTagId());
+                            preStm.executeUpdate();
+                        } catch (Exception tagException) {
+                            tagException.printStackTrace();
+                            System.out.println("Duplicated tag in question");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }
+
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeConnection();
+        }
+
+        return q;
+    }
+
+    public static boolean updateQuestion(Question q, String teacherId) {
+
+        conn = null;
+        preStm = null;
+        rs = null;
+
+        try {
+            conn = DBUtils.makeConnection();
+
+            if (conn != null) {
+                conn.setAutoCommit(false);
+
+                // Update question info
+                String sql = "UPDATE tbl_Question SET content = ?, type = ?, difficulty = ? WHERE questionId = ? AND teacherId = ?;";
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(1, q.getContent());
+                preStm.setString(2, q.getType());
+                preStm.setInt(3, q.getDifficulty());
+                preStm.setString(4, q.getQuestionId());
+                preStm.setString(5, teacherId);
+                preStm.executeUpdate();
+
+                // Delete old options of the question
+                preStm = null;
+                sql = "DELETE FROM tbl_Option WHERE questionId = ?";
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(1, q.getQuestionId());
+                preStm.executeUpdate();
+
+                // Delete old tags of the question
+                preStm = null;
+                sql = "DELETE FROM tbl_Question_Tag WHERE questionId = ?";
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(1, q.getQuestionId());
+                preStm.executeUpdate();
+
+                // Insert new options
                 for (Option o : q.getOptions()) {
                     try {
                         o.setQuestionId(q.getQuestionId());
@@ -151,9 +258,26 @@ public class QuestionDAO {
                     }
                 }
 
-                // Insert tags
-
+                // Insert new tags
                 for (Tag t : q.getTags()) {
+                    try {
+                        sql = "SELECT tagId, name FROM tbl_Tag WHERE name = ?";
+                        preStm = conn.prepareStatement(sql);
+                        preStm.setString(1, t.getName());
+                        rs = preStm.executeQuery();
+
+                        if (rs != null) {
+                            while (rs.next()) {
+                                String tagId = rs.getString("tagId");
+                                String name = rs.getString("name");
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+
                     try {
                         preStm = null;
                         sql = "INSERT INTO tbl_Tag (tagId, name) VALUES (?, ?);";
@@ -187,142 +311,14 @@ public class QuestionDAO {
                 conn.rollback();
             } catch (Exception e1) {
                 e1.printStackTrace();
-                return null;
+                return false;
             }
             e.printStackTrace();
-            return null;
+            return false;
         } finally {
             closeConnection();
         }
 
-        return q;
+        return true;
     }
-
-//    public static Question getQuestionById(String Id) throws SQLException, Exception {
-//        try {
-//            conn = DBUtils.makeConnection();
-//            String sql = "SELECT * FROM QUESTION WHERE questionId=?";
-//            preStm = conn.prepareStatement(sql);
-//            preStm.setString(1, Id);
-//            rs = preStm.executeQuery();
-//            while (rs.next()) {
-//                String questionId = rs.getString("questionId");
-//                String questionContent = rs.getString("content");
-//                String type = rs.getString("type");
-//                int difficulty = rs.getInt("difficulty");
-//                String userId = rs.getString("userId");
-//                Question question = new Question(questionId, userId, questionContent, type, difficulty);
-//                return question;
-//            }
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        } finally {
-//            closeConnection();
-//        }
-//        return null;
-//    }
-//
-//    ///////////////////////////////////////////// KHOA
-//    public static ArrayList<QuestionBank> getQuestionByTagName(String searchTagName) throws SQLException, Exception {
-//        try {
-//            conn = DBUtils.makeConnection();
-//            // 2 bảng John ( 1 cái để lấy Tag Name và 1 để lấy question Option)
-//            String sql = "SELECT questionId, questionContent, type, dificulty, userId, "
-//                    + "questionOptionId, questionOptionContent, isCorrect, "
-//                    + "from Question  question RIGHT JOIN  QuestionOption questionOption on question.questionId = questionOption.questionId "
-//                    + "where question.questionId =  (select questionTag.questionId "
-//                    + //trả về 1 list questionID mà người dùng tìm
-//                    "from   Question_Tag questionTag join Tag tag on questionTag.tagId = tag.tagId "
-//                    + "where tag.tagId like ?) ";
-//
-//            preStm = conn.prepareStatement(sql);
-//            preStm.setString(1, "%" + searchTagName + "%");
-//            rs = preStm.executeQuery();
-//
-//            ArrayList<QuestionBank> list = new ArrayList<>();
-//            // Nếu a không muốn hiện questionOption thì xóa nó đi nha
-//            while (rs.next()) {
-//                String questionId = rs.getString("questionId");
-//                String questionContent = rs.getString("questionContent");
-//                String type = rs.getString("type");
-//                int difficulty = rs.getInt("dificulty");
-//                String userId = rs.getString("userId");
-//                String questionOptionId = rs.getString("questionOptionId");
-//                String questionOptionContent = rs.getString("questionOptionContent");
-//                Boolean isCorrect = rs.getBoolean("isCorrect");
-//
-//                Question q = new Question(questionId, userId, questionContent, type, difficulty);
-//                QuestionOption qo = new QuestionOption(questionOptionId, questionId, questionOptionContent, isCorrect);
-//
-//                list.add(new QuestionBank(q, qo));
-//            }
-//            return list;
-//        } finally {
-//            closeConnection();
-//        }
-//    }
-//
-//    //GetQuestionOptionByQuestionId
-//    public static ArrayList<QuestionBank> getQuestionOptionByQuestionID(String searchQuestionId) throws SQLException, Exception {
-//        try {
-//            conn = DBUtils.makeConnection();
-//
-//            String sql = "SELECT question.questionId, question.questionContent, question.type, question.dificulty, question.userId, "
-//                    + "questionOption.questionOptionId, questionOption.questionOptionContent, questionOption.isCorrect "
-//                    + "from Question  question FULL OUTER JOIN QuestionOption questionOption on question.questionId = questionOption.questionId "
-//                    + "where  question.questionId  like ?";
-//
-//            preStm = conn.prepareStatement(sql);
-//            preStm.setString(1, "%" + searchQuestionId + "%");
-//            rs = preStm.executeQuery();
-//
-//            ArrayList<QuestionBank> list = new ArrayList<>();
-//            // Sửa lại kiểu dữ liệu để thông với DB với e với
-//            while (rs.next()) {
-//                String questionId = rs.getString("questionId");
-//                String questionContent = rs.getString("questionContent");
-//                String type = rs.getString("type");
-//                Integer difficulty = rs.getInt("dificulty");
-//                String userId = rs.getString("userId");
-//                String questionOptionId = rs.getString("questionOptionId");
-//                String questionOptionContent = rs.getString("questionOptionContent");
-//                Boolean isCorrect = rs.getBoolean("isCorrect");
-//
-//                Question q = new Question(questionId, userId, questionContent, type, difficulty);
-//                QuestionOption qo = new QuestionOption(questionOptionId, questionId, questionOptionContent, isCorrect);
-//
-//                list.add(new QuestionBank(q, qo));
-//            }
-//            return list;
-//        } finally {
-//            closeConnection();
-//        }
-//    }
-//
-//    ///////////////////////////////// THUAN
-//    public static void deleteQuestion(String id) throws Exception {
-//        try {
-//            conn = DBUtils.makeConnection();
-//            String query = "DELETE from Question where questionId=" + id;
-//            preStm = conn.prepareCall(query);
-//            preStm.executeUpdate();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            closeConnection();
-//        }
-//    }
-//
-//    public static void deleteQuestionChoices(String questionId) throws Exception {
-//        try {
-//            conn = DBUtils.makeConnection();
-//            String query = "DELETE from QuestionOption where questionId=" + questionId;
-//            preStm = conn.prepareCall(query);
-//            preStm.executeUpdate();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            closeConnection();
-//        }
-//    }
 }

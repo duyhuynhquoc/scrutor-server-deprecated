@@ -28,4 +28,13 @@ public class QuestionsAPI {
         Question newQuestion = QuestionDAO.createQuestion(q, teacherId);
         return newQuestion;
     }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean updateQuestion(@Context HttpHeaders headers, Question q){
+        String teacherId = headers.getRequestHeader("userId").get(0);
+        boolean result = QuestionDAO.updateQuestion(q, teacherId);
+        return result;
+    }
 }

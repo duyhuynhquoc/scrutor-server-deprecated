@@ -14,7 +14,7 @@ public class Question {
     private ArrayList<Option> options;
 
     public Question() {
-        this.questionId = UUID.randomUUID().toString();
+        this.questionId = null;
         this.teacherId = null;
         this.content = null;
         this.type = null;
@@ -24,7 +24,6 @@ public class Question {
     }
 
     public Question(String teacherId, String content, String type, int difficulty, ArrayList<Tag> tags, ArrayList<Option> options) {
-        this.questionId = UUID.randomUUID().toString();
         this.teacherId = teacherId;
         this.content = content;
         this.type = type;
@@ -44,7 +43,6 @@ public class Question {
     }
 
     public Question(String content, String type, int difficulty, ArrayList<Tag> tags, ArrayList<Option> options) {
-        this.questionId = UUID.randomUUID().toString();
         this.content = content;
         this.type = type;
         this.difficulty = difficulty;
@@ -111,7 +109,11 @@ public class Question {
 
     public boolean addOption(Option o){
         this.options.add(o);
+        return true;
+    }
 
+    public boolean addTag(Tag t){
+        this.tags.add(t);
         return true;
     }
 }
