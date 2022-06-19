@@ -1,29 +1,26 @@
 package dtos;
 
+import java.time.LocalDateTime;
 import java.util.Date;
-//import java.sql.Date;
 
 public class Quiz {
 
     private String quizId;
-    private String quizName;
+    private String teacherId;
+    private String title;
     private String description;
-    private Date startAt;
-    private Date endAt;
-    private int time;
-    private String userId;
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
+    private LocalDateTime time;
 
-    public Quiz() {
-    }
-
-    public Quiz(String quizId, String quizName, String description, Date startAt, Date endAt, int time, String userId) {
+    public Quiz(String quizId, String teacherId, String title, String description, LocalDateTime startAt, LocalDateTime endAt, LocalDateTime time) {
         this.quizId = quizId;
-        this.quizName = quizName;
+        this.teacherId = teacherId;
+        this.title = title;
         this.description = description;
         this.startAt = startAt;
         this.endAt = endAt;
         this.time = time;
-        this.userId = userId;
     }
 
     public String getQuizId() {
@@ -34,12 +31,20 @@ public class Quiz {
         this.quizId = quizId;
     }
 
-    public String getQuizName() {
-        return quizName;
+    public String getTeacherId() {
+        return teacherId;
     }
 
-    public void setQuizName(String quizName) {
-        this.quizName = quizName;
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -50,35 +55,27 @@ public class Quiz {
         this.description = description;
     }
 
-    public Date getStartAt() {
+    public LocalDateTime getStartAt() {
         return startAt;
     }
 
-    public void setStartAt(Date startAt) {
+    public void setStartAt(LocalDateTime startAt) {
         this.startAt = startAt;
     }
 
-    public Date getEndAt() {
+    public LocalDateTime getEndAt() {
         return endAt;
     }
 
-    public void setEndAt(Date endAt) {
+    public void setEndAt(LocalDateTime endAt) {
         this.endAt = endAt;
     }
 
-    public int getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }
