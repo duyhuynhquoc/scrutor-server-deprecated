@@ -14,10 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import utils.DBUtils;
 
-/**
- *
- * @author LCCuong
- */
+
 public class TagDAO {
 
     private static Connection conn;
@@ -43,34 +40,6 @@ public class TagDAO {
             e.printStackTrace();
         }
     }
-
-    //9/6/2022
-//    public static ArrayList<Tag> GetAllTag() throws SQLException, Exception {
-//        Connection con = null;
-//        PreparedStatement preStm = null;
-//        ResultSet rs = null;
-//        try {
-//            con = DBUtils.makeConnection();
-//            String sql = "SELECT tagId, tagName "
-//                    + "from Tag";
-//
-//            preStm = con.prepareStatement(sql);
-//            rs = preStm.executeQuery();
-//
-//            ArrayList<Tag> list = new ArrayList<Tag>();
-//
-//            while (rs.next()) {
-//                String tagId = rs.getString("tagId");
-//                String tagName = rs.getString("tagName");
-//
-//                Tag tag = new Tag(tagId, tagName);
-//                list.add(tag);
-//            }
-//            return list;
-//        } finally {
-//            closeConnection();
-//        }
-//    }
 
     public static ArrayList<Tag> getTags() {
         conn = null;

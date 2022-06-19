@@ -5,17 +5,19 @@
  */
 package daos;
 
+import dtos.Option;
+import dtos.Question;
+import dtos.Tag;
 import dtos.User;
 import utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.UUID;
 
-/**
- *
- * @author LCCuong
- */
+
 public class UserDAO {
 
     private static Connection conn = null;
@@ -25,84 +27,108 @@ public class UserDAO {
     public UserDAO() {
     }
 
-    private static void closeConnection() throws Exception {
-        if (rs != null) {
-            rs.close();
-        }
-        if (preStm != null) {
-            preStm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
-    }
-
-    public static User getTeacher(String userId, String password) throws Exception {
-        User teacher = null;
+    private static void closeConnection() {
         try {
-            String sql = "SELECT userId, FullName, password, email, role FROM scrutor_User"
-                    + "WHERE userId=? AND password=? AND Role=teacher";
-            conn = DBUtils.makeConnection();
 
-            preStm = conn.prepareStatement(sql);
-            preStm.setString(1, userId);
-            preStm.setString(2, password);
-            rs = preStm.executeQuery();
-
-            if (rs.next()) {
-                teacher = new User(rs.getString("userId"), rs.getString("FullName"),
-                        rs.getString("password"), rs.getString("email"), rs.getString("role"));
+            if (rs != null) {
+                rs.close();
             }
-        } finally {
-            closeConnection();
+            if (preStm != null) {
+                preStm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return teacher;
     }
 
-    public static User getStudent(String userId, String password) throws Exception {
-        User student = null;
-        try {
-            String sql = "SELECT userId, FullName, password, email, role FROM scrutor_User"
-                    + "WHERE userId=? AND password=? AND Role=student";
-            conn = DBUtils.makeConnection();
-
-            preStm = conn.prepareStatement(sql);
-            preStm.setString(1, userId);
-            preStm.setString(2, password);
-            rs = preStm.executeQuery();
-
-            if (rs.next()) {
-                student = new User(rs.getString("userId"), rs.getString("FullName"),
-                        rs.getString("password"), rs.getString("email"), rs.getString("role"));
-            }
-        } finally {
-            closeConnection();
-        }
-        return student;
-    }
-
-    public static User createAccount(String userId, String fullname, String password, String email, String role) throws Exception {
+    public static User getUserByEmailAndPassword(String email, String password) {
+        conn = null;
+        preStm = null;
+        rs = null;
         User user = null;
+
         try {
-            String sql = "Insert Into scrutor_User"
-                    + " values(?, ?, ?, ?, ?) ";
             conn = DBUtils.makeConnection();
 
-            preStm = conn.prepareStatement(sql);
-            preStm.setString(1, userId);
-            preStm.setString(2, fullname);
-            preStm.setString(3, password);
-            preStm.setString(4, email);
-            preStm.setString(5, role);
-            rs = preStm.executeQuery();
+            if (conn != null) {
+                conn.setAutoCommit(false);
 
-            if (rs.next()) {
-                user = new User(rs.getString("userId"), rs.getString("FullName"),
-                        rs.getString("password"), rs.getString("email"), rs.getString("role"));
+                // Fetch user
+                String sql = "SELECT u.userId, u.fullName, u.role\n" +
+                        "FROM `User` u WHERE u.email = ? AND u.password = ? LIMIT 1;";
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(1, email);
+                preStm.setString(2, password);
+                rs = preStm.executeQuery();
+
+                if (rs != null && rs.next()) {
+                    String userId = rs.getString("u.userId");
+                    String fullName = rs.getString("u.fullName");
+                    String role = rs.getString("u.role");
+
+                    user = new User(userId, fullName, email, password, role);
+                }
             }
+
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+            e.printStackTrace();
+            return null;
         } finally {
             closeConnection();
         }
+
+        return user;
+    }
+
+    public static User createUser(User user) {
+        conn = null;
+        preStm = null;
+        rs = null;
+
+        try {
+            conn = DBUtils.makeConnection();
+
+            if (conn != null) {
+                conn.setAutoCommit(false);
+
+                String userId = UUID.randomUUID().toString();
+                user.setUserId(userId);
+                String sql = "INSERT INTO `User`(userId, fullname, email, password, role) VALUES (?, ?, ?, ?, ?);";
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(1, userId);
+                preStm.setString(2, user.getFullName());
+                preStm.setString(3, user.getEmail());
+                preStm.setString(4, user.getPassword());
+                preStm.setString(5, user.getRole());
+                preStm.executeUpdate();
+            }
+
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeConnection();
+        }
+
         return user;
     }
 

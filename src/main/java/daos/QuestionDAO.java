@@ -117,6 +117,7 @@ public class QuestionDAO {
                 return null;
             }
             e.printStackTrace();
+            return null;
         } finally {
             closeConnection();
         }
@@ -348,7 +349,6 @@ public class QuestionDAO {
 
         return true;
     }
-
 
     public static boolean deleteQuestion(String questionId, String teacherId) {
         conn = null;
